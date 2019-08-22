@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { fetchGames } from "../redux/gameActions";
+import { Container, Header, Segment, Button, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
 
 class GameList extends Component {
   componentDidMount() {
@@ -14,25 +15,45 @@ class GameList extends Component {
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <Container text>
+        <Dimmer active inverted>
+          <Loader content='Loading' />
+        </Dimmer>
+      </Container>
     }
 
-    return (
-        <div className="GameList-container">
-          <ul>
-            {this.props.games.map(game => (
-              <li key={game.id}>
-                 {game.name} servers:
-                 {
-                      game.discords.map(discord => {
-                              return discord.link
-                      })
-                 }
-              </li>
-            ))}
-          </ul>
-        </div>
-    );
+    return <Container text>
+      <Header as='h2' icon textAlign='center' color='teal'>
+        <Icon name='unordered list' circular />
+        <Header.Content>
+          Ninja Report
+        </Header.Content>
+      </Header>
+      <Divider hidden section />
+        {games.length ?
+          games.map(game => (
+              <Container>
+                <Header as='h2'>{game.name}</Header>
+                {game.description && <p>Description: {game.description}</p>}
+                {game.servers && <p>Server(s): {game.servers}</p>}
+                {game.platform && <p>Platform(s): {game.platform}</p>}
+                {game.discords &&
+                  <Segment.Group>
+                    {game.discords.map((discord, i) => (
+                        <Segment key={i}>
+                          <a href={discord.link}>{discord.link}</a>
+                          &nbsp; | Online: {discord.population}
+                        </Segment>
+                    ))}
+                  </Segment.Group>
+                }
+                <Divider section />
+              </Container>
+            ))
+          : <Container textAlign='center'>No games found.</Container>
+        }
+      <Divider section />
+    </Container>
   }
 }
 
