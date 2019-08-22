@@ -5,8 +5,11 @@ module Api::V1
     # GET /games
     def index
       @games = Game.all
-
-      render json: @games
+      render json: @games.as_json(
+         include: {
+            discords: {}
+         }
+      )
     end
 
     # GET /games/1
