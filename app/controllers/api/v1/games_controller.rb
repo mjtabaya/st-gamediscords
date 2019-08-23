@@ -20,9 +20,14 @@ module Api::V1
     # POST /games
     def create
       @game = Game.new(game_params)
-
       if @game.save
-        render json: @game, status: :created, location: @game
+        #render json: @games, status: :created, location: @games
+        @games = Game.all
+        render json: @games.as_json(
+           include: {
+              discords: {}
+           }
+        )
       else
         render json: @game.errors, status: :unprocessable_entity
       end

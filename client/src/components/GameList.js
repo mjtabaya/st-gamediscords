@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { fetchGames } from "../redux/gameActions";
+import { postNewGame } from "../redux/gameActions";
+import NewGameForm from './NewGameForm';
 import { Container, Header, Segment, Button, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
-import { withRouter } from 'react-router-dom';
 
 class GameList extends Component {
   constuctor() {
@@ -58,6 +59,7 @@ class GameList extends Component {
           >
               List new game
           </Button>
+          <NewGameForm onNewGame={this.postNewGame} />
         </Header.Content>
       </Header>
       <Divider hidden section />
