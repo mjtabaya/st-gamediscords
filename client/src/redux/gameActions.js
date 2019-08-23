@@ -9,7 +9,6 @@ export function fetchGames() {
     dispatch(fetchGamesBegin());
     return getGames()
       .then(json => {
-        console.log(json)
         dispatch(fetchGamesSuccess(json));
         return json.games;
       })
@@ -30,7 +29,9 @@ export function fetchGame(id) {
     dispatch(fetchGameBegin());
     return getGame(id)
       .then(json => {
+        console.log("fetchgamebegin-1")
         console.log(json)
+        console.log("fetchgamebegin-2")
         dispatch(fetchGameSuccess(json));
         return json.game;
       })
@@ -63,12 +64,52 @@ export function postNewGame(game) {
     dispatch(postGameBegin());
     return addNewGame(game)
       .then(json => {
+        console.log("postnewgame-1")
         console.log(json)
+        console.log("postnewgame-2")
         dispatch(postGameSuccess(json));
         return json.games;
       })
       .catch(error =>
         dispatch(postGameFailure(error))
+      );
+  };
+}
+
+function editGame(game) {
+  console.log("editgame-1")
+  console.log(game)
+  console.log("editgame-2")
+  return fetch('/api/v1/games/'+ game.id, {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(game), // body data type must match "Content-Type" header
+    })
+    .then(handleErrors)
+    .then(res => res.json());
+}
+
+export function putGame(game) {
+  return dispatch => {
+    dispatch(putGameBegin());
+    return editGame(game)
+      .then(json => {
+        console.log("putgame-1")
+        console.log(json)
+        console.log("putgame-2")
+        dispatch(putGameSuccess(json));
+        return json.games;
+      })
+      .catch(error =>
+        dispatch(putGameFailure(error))
       );
   };
 }
@@ -135,5 +176,27 @@ export const postGameSuccess = game => ({
 
 export const postGameFailure = error => ({
   type: POST_GAME_FAILURE,
+  payload: { error }
+});
+
+
+// [U]pdate, PATCH/PUT GAME
+
+export const PUT_GAME_BEGIN = "PUT_GAME_BEGIN";
+export const PUT_GAME_SUCCESS = "PUT_GAME_SUCCESS";
+export const PUT_GAME_FAILURE = "PUT_GAME_FAILURE";
+
+export const putGameBegin = (game) => ({
+  type: PUT_GAME_BEGIN,
+  payload: {game}
+});
+
+export const putGameSuccess = game => ({
+  type: PUT_GAME_SUCCESS,
+  payload: { game }
+});
+
+export const putGameFailure = error => ({
+  type: PUT_GAME_FAILURE,
   payload: { error }
 });

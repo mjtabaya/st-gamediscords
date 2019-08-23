@@ -41,7 +41,12 @@ module Api::V1
     # PATCH/PUT /games/1
     def update
       if @game.update(game_params)
-        render json: @game
+        @games = Game.all
+        render json: @games.as_json(
+           include: {
+              discords: {}
+           }
+        )
       else
         render json: @game.errors, status: :unprocessable_entity
       end

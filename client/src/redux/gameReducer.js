@@ -7,7 +7,10 @@ import {
   FETCH_GAME_FAILURE,
   POST_GAME_BEGIN,
   POST_GAME_SUCCESS,
-  POST_GAME_FAILURE
+  POST_GAME_FAILURE,
+  PUT_GAME_BEGIN,
+  PUT_GAME_SUCCESS,
+  PUT_GAME_FAILURE
 } from "./gameActions";
 
 const initialState = {
@@ -33,7 +36,6 @@ export default function gameReducer(
     case FETCH_GAMES_SUCCESS:
       // All done: set loading "false".
       // Also, replace the items with the ones from the server
-      console.log(action)
       return {
         ...state,
         loading: false,
@@ -65,7 +67,6 @@ export default function gameReducer(
       case FETCH_GAME_SUCCESS:
         // All done: set loading "false".
         // Also, replace the items with the ones from the server
-        console.log(action)
         return {
           ...state,
           loading: false,
@@ -85,7 +86,7 @@ export default function gameReducer(
           items: []
         };
 
-      case   POST_GAME_BEGIN:
+      case POST_GAME_BEGIN:
         return {
           ...state,
           loading: true,
@@ -93,7 +94,6 @@ export default function gameReducer(
         };
 
       case POST_GAME_SUCCESS:
-        console.log(action)
         return {
           ...state,
           loading: false,
@@ -101,6 +101,28 @@ export default function gameReducer(
         };
 
       case POST_GAME_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          items: []
+        };
+
+      case PUT_GAME_BEGIN:
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+
+      case PUT_GAME_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          items: action.payload.game
+        };
+
+      case PUT_GAME_FAILURE:
         return {
           ...state,
           loading: false,

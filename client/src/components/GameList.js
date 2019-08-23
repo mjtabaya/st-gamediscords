@@ -1,35 +1,40 @@
 import React, { Component } from 'react';
+import ReactModal from 'react-modal';
 import { connect } from "react-redux";
 import { fetchGames } from "../redux/gameActions";
-import { postNewGame } from "../redux/gameActions";
+//import { postNewGame } from "../redux/gameActions";
+import EditGame from './EditGame';
 import NewGameForm from './NewGameForm';
-import { Container, Header, Segment, Button, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
-import { Link } from 'react-router-dom';
+import { Container, Header, Segment, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
 
 class GameList extends Component {
-  constuctor() {
-    //this.routeToNewGame = this.routeToNewGame.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.handleRouteChange = this.handleRouteChange.bind(this);
-    this.state = { page_number: 0 }
+  constructor() {
+    super()
+    console.log("fweesh")
+    this.state = {
+      page_number: 0,
+      showModal: false,
+      game: null,
+      games: null
+    }
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+  }
+
+  handleOpenModal (game) {
+    this.setState({
+      showModal: true,
+      game: game
+    });
+  }
+
+  handleCloseModal () {
+    console.log("fwoosh")
+    this.setState({ showModal: false });
   }
 
   componentDidMount() {
     this.props.dispatch(fetchGames());
-    window.addEventListener('hashchange', this.handleRouteChange, false);
-  }
-
-  handlePageChange(id) {
-    window.location = '/games/edit/'+id;
-  }
-
-  handleRouteChange(event) {
-     const destination = event.newURL;
-  }
-
-  routeToGame(id) {
-    let path = '/games/'+id;
-    //this.props.history.push(path);
   }
 
   render() {
@@ -61,16 +66,10 @@ class GameList extends Component {
       <Divider hidden section />
         {games.length ?
           games.map(game => (
-              console.log(game),
               <Container>
                 <Header as='h2'>
                   <a href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
-                  <Link
-                      to={{
-                      pathname: '/games/edit/'+game.id,
-                      state: { game }
-                    }}>| (Edit)
-                  </Link>
+                  <button onClick={()=>this.handleOpenModal(game)}>Edit Modal</button>
                 </Header>
                 {game.description && <p>Description: {game.description}</p>}
                 {game.servers && <p>Server(s): {game.servers}</p>}
@@ -91,6 +90,13 @@ class GameList extends Component {
           : <Container textAlign='center'>No games found.</Container>
         }
       <Divider section />
+      <ReactModal
+        isOpen={this.state.showModal}
+        contentLabel="Minimal Modal Example"
+      >
+        <button onClick={this.handleCloseModal}>Close Modal</button>
+        <EditGame game={this.state.game}/>
+      </ReactModal>
     </Container>
   }
 }
