@@ -69,7 +69,7 @@ class GameList extends Component {
                       to={{
                       pathname: '/games/edit/'+game.id,
                       state: { game }
-                    }}>Edit
+                    }}>| (Edit)
                   </Link>
                 </Header>
                 {game.description && <p>Description: {game.description}</p>}

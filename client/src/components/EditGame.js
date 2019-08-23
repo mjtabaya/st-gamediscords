@@ -25,7 +25,6 @@ class EditGame extends Component {
   componentDidMount() {
     this.props.dispatch(fetchGame(this.props.match.params.id));
     window.addEventListener('hashchange', this.handleRouteChange, false);
-    this.setState ({ game: this.props.location.state.game })
     console.log(this.state.game)
   }
 
@@ -62,7 +61,7 @@ class EditGame extends Component {
 }
 
 const mapStateToProps = state => ({
-  game: state.game,
+  games: state.games.items,
   loading: state.games.loading,
   error: state.games.error
 });
