@@ -2,10 +2,32 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { fetchGames } from "../redux/gameActions";
 import { Container, Header, Segment, Button, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom';
 
 class GameList extends Component {
+  constuctor() {
+    //this.routeToNewGame = this.routeToNewGame.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleRouteChange = this.handleRouteChange.bind(this);
+    this.state = { page_number: 0 }
+  }
+
+  handlePageChange() {
+    window.location = "/newgame";
+  }
+
+  handleRouteChange(event) {
+     const destination = event.newURL;
+  }
+
   componentDidMount() {
     this.props.dispatch(fetchGames());
+    window.addEventListener('hashchange', this.handleRouteChange, false);
+  }
+
+  routeToNewGame() {
+    let path = '/newgame';
+    this.props.history.push(path);
   }
 
   render() {
@@ -28,6 +50,14 @@ class GameList extends Component {
         <Icon name='unordered list' circular />
         <Header.Content>
           Ninja Report
+          <br/>
+          Don't see your game?
+          <br/>
+          <Button color="primary" className="px-4"
+            onClick={this.handlePageChange}
+          >
+              List new game
+          </Button>
         </Header.Content>
       </Header>
       <Divider hidden section />

@@ -4,17 +4,17 @@ const NewGameForm = ({onNewGame = f => f}) => {
     let name, description, servers, platform
     const submit = e => {
         e.preventDefault()
-        onNewGame(_name.value, _description.value, _servers.value, _platform.value)
+        onNewGame(name.value, description.value, servers.value, platform.value)
         name.value = ''
         description.value = ''
         servers.value = ''
         platform.value = ''
-        title.focus()
+        name.focus()
     }
 
     return (
         <form onSubmit={submit}>
-            <input  ref={input => title = input}
+            <input  ref={input => name = input}
                     type="text"
                     placeholder="Name..." required />
             <input  ref={input => description = input}
