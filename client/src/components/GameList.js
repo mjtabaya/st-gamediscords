@@ -61,13 +61,14 @@ class GameList extends Component {
       <Divider hidden section />
         {games.length ?
           games.map(game => (
+              console.log(game),
               <Container>
                 <Header as='h2'>
                   <a href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
                   <Link
                       to={{
                       pathname: '/games/edit/'+game.id,
-                      state: { message: 'hello, im a passed message!' }
+                      state: { game }
                     }}>Edit
                   </Link>
                 </Header>
