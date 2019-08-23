@@ -19,6 +19,27 @@ export function fetchGames() {
   };
 }
 
+function getGame(id) {
+  return fetch("../../api/v1/games/"+id)
+    .then(handleErrors)
+    .then(res => res.json());
+}
+
+export function fetchGame(id) {
+  return dispatch => {
+    dispatch(fetchGameBegin());
+    return getGame(id)
+      .then(json => {
+        console.log(json)
+        dispatch(fetchGameSuccess(json));
+        return json.game;
+      })
+      .catch(error =>
+        dispatch(fetchGameFailure(error))
+      );
+  };
+}
+
 function addNewGame(game) {
   return fetch('/api/v1/games', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -75,6 +96,24 @@ export const fetchGamesSuccess = games => ({
 
 export const fetchGamesFailure = error => ({
   type: FETCH_GAMES_FAILURE,
+  payload: { error }
+});
+
+export const FETCH_GAME_BEGIN = "FETCH_GAME_BEGIN";
+export const FETCH_GAME_SUCCESS = "FETCH_GAME_SUCCESS";
+export const FETCH_GAME_FAILURE = "FETCH_GAME_FAILURE";
+
+export const fetchGameBegin = (id) => ({
+  type: FETCH_GAME_BEGIN
+});
+
+export const fetchGameSuccess = game => ({
+  type: FETCH_GAME_SUCCESS,
+  payload: { game }
+});
+
+export const fetchGameFailure = error => ({
+  type: FETCH_GAME_FAILURE,
   payload: { error }
 });
 

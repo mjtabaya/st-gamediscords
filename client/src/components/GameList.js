@@ -4,6 +4,7 @@ import { fetchGames } from "../redux/gameActions";
 import { postNewGame } from "../redux/gameActions";
 import NewGameForm from './NewGameForm';
 import { Container, Header, Segment, Button, Icon, Dimmer, Loader, Divider } from 'semantic-ui-react'
+import { Link } from 'react-router-dom';
 
 class GameList extends Component {
   constuctor() {
@@ -13,22 +14,22 @@ class GameList extends Component {
     this.state = { page_number: 0 }
   }
 
-  handlePageChange() {
-    window.location = "/newgame";
+  componentDidMount() {
+    this.props.dispatch(fetchGames());
+    window.addEventListener('hashchange', this.handleRouteChange, false);
+  }
+
+  handlePageChange(id) {
+    window.location = '/games/edit/'+id;
   }
 
   handleRouteChange(event) {
      const destination = event.newURL;
   }
 
-  componentDidMount() {
-    this.props.dispatch(fetchGames());
-    window.addEventListener('hashchange', this.handleRouteChange, false);
-  }
-
-  routeToNewGame() {
-    let path = '/newgame';
-    this.props.history.push(path);
+  routeToGame(id) {
+    let path = '/games/'+id;
+    //this.props.history.push(path);
   }
 
   render() {
@@ -54,11 +55,6 @@ class GameList extends Component {
           <br/>
           Don't see your game?
           <br/>
-          <Button color="primary" className="px-4"
-            onClick={this.handlePageChange}
-          >
-              List new game
-          </Button>
           <NewGameForm onNewGame={this.postNewGame} />
         </Header.Content>
       </Header>
@@ -68,7 +64,12 @@ class GameList extends Component {
               <Container>
                 <Header as='h2'>
                   <a href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
-                  <a href="#"> | Edit</a>
+                  <Link
+                      to={{
+                      pathname: '/games/edit/'+game.id,
+                      state: { message: 'hello, im a passed message!' }
+                    }}>Edit
+                  </Link>
                 </Header>
                 {game.description && <p>Description: {game.description}</p>}
                 {game.servers && <p>Server(s): {game.servers}</p>}

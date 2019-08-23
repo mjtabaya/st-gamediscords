@@ -2,6 +2,9 @@ import {
   FETCH_GAMES_BEGIN,
   FETCH_GAMES_SUCCESS,
   FETCH_GAMES_FAILURE,
+  FETCH_GAME_BEGIN,
+  FETCH_GAME_SUCCESS,
+  FETCH_GAME_FAILURE,
   POST_GAME_BEGIN,
   POST_GAME_SUCCESS,
   POST_GAME_FAILURE
@@ -49,6 +52,38 @@ export default function gameReducer(
         error: action.payload.error,
         items: []
       };
+
+      case FETCH_GAME_BEGIN:
+        // Mark the state as "loading" so we can show a spinner or something
+        // Also, reset any errors. We're starting fresh.
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+
+      case FETCH_GAME_SUCCESS:
+        // All done: set loading "false".
+        // Also, replace the items with the ones from the server
+        console.log(action)
+        return {
+          ...state,
+          loading: false,
+          items: action.payload.game
+        };
+
+      case FETCH_GAME_FAILURE:
+        // The request failed, but it did stop, so set loading to "false".
+        // Save the error, and we can display it somewhere
+        // Since it failed, we don't have items to display anymore, so set it empty.
+        // This is up to you and your app though: maybe you want to keep the items
+        // around! Do whatever seems right.
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          items: []
+        };
 
       case   POST_GAME_BEGIN:
         return {

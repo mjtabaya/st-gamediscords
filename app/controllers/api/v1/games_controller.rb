@@ -14,7 +14,12 @@ module Api::V1
 
     # GET /games/1
     def show
-      render json: @game
+      @game = Game.find(params[:id])
+      render json: @game.as_json(
+         include: {
+            discords: {}
+         }
+      )
     end
 
     # POST /games
