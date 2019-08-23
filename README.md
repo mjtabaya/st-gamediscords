@@ -5,4 +5,5 @@
 * Deployment instructions:
 
   - run rails db:migrate db:seed
+  - yarn install
   - rake start

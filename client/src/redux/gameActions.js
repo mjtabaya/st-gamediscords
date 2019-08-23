@@ -4,40 +4,38 @@ function getGames() {
     .then(res => res.json());
 }
 
-function fakeGetGames() {
-  return new Promise(resolve => {
-    setTimeout(
-      () =>
-        resolve({
-          games: [
-            {
-              id: 0,
-              name: "Pokemon"
-            },
-            {
-              id: 1,
-              name: "Digimon"
-            }
-          ]
-        }),
-      1000
-    );
-  });
-}
-
 export function fetchGames() {
   return dispatch => {
     dispatch(fetchGamesBegin());
     return getGames()
       .then(json => {
-        console.log("--You are-z-")
         console.log(json)
-        console.log("^^ here ^^")
         dispatch(fetchGamesSuccess(json));
         return json.games;
       })
       .catch(error =>
         dispatch(fetchGamesFailure(error))
+      );
+  };
+}
+
+function addNewGame(name, description, servers, platform) {
+    return fetch( '/api/v1/games', { game: {name, description, servers, platform} })
+      .then(handleErrors)
+      .then(res => res.json());
+}
+
+export function postNewGame(game) {
+  return dispatch => {
+    dispatch(postGameBegin());
+    return addNewGame(game)
+      .then(json => {
+        console.log(json)
+        dispatch(postGameSuccess(json));
+        return json.games;
+      })
+      .catch(error =>
+        dispatch(postGameFailure(error))
       );
   };
 }
@@ -65,5 +63,26 @@ export const fetchGamesSuccess = games => ({
 
 export const fetchGamesFailure = error => ({
   type: FETCH_GAMES_FAILURE,
+  payload: { error }
+});
+
+// [C]reate, POST NEW GAME
+
+export const POST_GAME_BEGIN = "POST_GAME_BEGIN";
+export const POST_GAME_SUCCESS = "POST_GAME_SUCCESS";
+export const POST_GAME_FAILURE = "POST_GAME_FAILURE";
+
+export const postGameBegin = (game) => ({
+  type: POST_GAME_BEGIN,
+  payload: {game}
+});
+
+export const postGameSuccess = game => ({
+  type: POST_GAME_SUCCESS,
+  payload: { game }
+});
+
+export const postGameFailure = error => ({
+  type: POST_GAME_FAILURE,
   payload: { error }
 });

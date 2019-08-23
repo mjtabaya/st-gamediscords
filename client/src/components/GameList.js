@@ -7,6 +7,7 @@ class GameList extends Component {
   componentDidMount() {
     this.props.dispatch(fetchGames());
   }
+
   render() {
     const { error, loading, games } = this.props;
 
@@ -33,7 +34,10 @@ class GameList extends Component {
         {games.length ?
           games.map(game => (
               <Container>
-                <Header as='h2'>{game.name}</Header>
+                <Header as='h2'>
+                  <a href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
+                  <a href="#"> | Edit</a>
+                </Header>
                 {game.description && <p>Description: {game.description}</p>}
                 {game.servers && <p>Server(s): {game.servers}</p>}
                 {game.platform && <p>Platform(s): {game.platform}</p>}

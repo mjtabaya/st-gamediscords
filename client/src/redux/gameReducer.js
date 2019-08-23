@@ -1,7 +1,10 @@
 import {
   FETCH_GAMES_BEGIN,
   FETCH_GAMES_SUCCESS,
-  FETCH_GAMES_FAILURE
+  FETCH_GAMES_FAILURE,
+  POST_GAME_BEGIN,
+  POST_GAME_SUCCESS,
+  POST_GAME_FAILURE
 } from "./gameActions";
 
 const initialState = {
@@ -46,6 +49,29 @@ export default function gameReducer(
         error: action.payload.error,
         items: []
       };
+
+      case   POST_GAME_BEGIN:
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+
+      case POST_GAME_SUCCESS:
+        console.log(action)
+        return {
+          ...state,
+          loading: false,
+          items: action.payload.game
+        };
+
+      case POST_GAME_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          items: []
+        };
 
     default:
       // ALWAYS have a default case in a reducer
