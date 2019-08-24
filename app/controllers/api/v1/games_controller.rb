@@ -55,6 +55,12 @@ module Api::V1
     # DELETE /games/1
     def destroy
       @game.destroy
+      @games = Game.all
+      render json: @games.as_json(
+         include: {
+            discords: {}
+         }
+      )
     end
 
     private

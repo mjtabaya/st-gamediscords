@@ -114,6 +114,44 @@ export function putGame(game) {
   };
 }
 
+function requestDeleteGame(game) {
+  console.log("requestdeletegame-1")
+  console.log(game)
+  console.log("requestdeletegame-2")
+  return fetch('/api/v1/games/'+ game.id, {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(game), // body data type must match "Content-Type" header
+    })
+    .then(handleErrors)
+    .then(res => res.json());
+}
+
+export function deleteGame(game) {
+  return dispatch => {
+    dispatch(deleteGameBegin());
+    return requestDeleteGame(game)
+      .then(json => {
+        console.log("deletegame-1")
+        console.log(json)
+        console.log("deletegame-2")
+        dispatch(deleteGameSuccess(json));
+        return json.games;
+      })
+      .catch(error =>
+        dispatch(deleteGameFailure(error))
+      );
+  };
+}
+
 // Handle HTTP errors since fetch won't.
 function handleErrors(response) {
   if (!response.ok) {
@@ -198,5 +236,26 @@ export const putGameSuccess = game => ({
 
 export const putGameFailure = error => ({
   type: PUT_GAME_FAILURE,
+  payload: { error }
+});
+
+// [D]elete, DELETE GAME
+
+export const DELETE_GAME_BEGIN = "DELETE_GAME_BEGIN";
+export const DELETE_GAME_SUCCESS = "DELETE_GAME_SUCCESS";
+export const DELETE_GAME_FAILURE = "DELETE_GAME_FAILURE";
+
+export const deleteGameBegin = (game) => ({
+  type: DELETE_GAME_BEGIN,
+  payload: {game}
+});
+
+export const deleteGameSuccess = game => ({
+  type: DELETE_GAME_SUCCESS,
+  payload: { game }
+});
+
+export const deleteGameFailure = error => ({
+  type: DELETE_GAME_FAILURE,
   payload: { error }
 });

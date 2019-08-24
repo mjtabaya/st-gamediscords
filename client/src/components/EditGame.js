@@ -5,9 +5,6 @@ import { putGame } from "../redux/gameActions";
 class EditGame extends Component {
   constructor(props) {
     super(props)
-    console.log("fwee")
-    console.log(this.props.game)
-    console.log("fwoosh")
     this.state = {
       game: this.props
     }
@@ -25,7 +22,6 @@ class EditGame extends Component {
       platform: this.state.platform
     }
     this.props.modalClose()
-    console.log(data)
     this.props.dispatch(putGame(data));
   }
 
@@ -39,6 +35,7 @@ class EditGame extends Component {
 
   componentDidMount() {
     window.addEventListener('hashchange', this.handleRouteChange, false);
+    console.log(this.props.game.discords)
   }
 
   onChangeHandler(e){

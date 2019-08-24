@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import { connect } from "react-redux";
 import { fetchGames } from "../redux/gameActions";
+import { deleteGame } from "../redux/gameActions";
 //import { postNewGame } from "../redux/gameActions";
 import EditGame from './EditGame';
 import NewGameForm from './NewGameForm';
@@ -10,7 +11,6 @@ import { Container, Header, Segment, Icon, Dimmer, Loader, Divider } from 'seman
 class GameList extends Component {
   constructor() {
     super()
-    console.log("fweesh")
     this.state = {
       page_number: 0,
       showModal: false,
@@ -19,6 +19,7 @@ class GameList extends Component {
     }
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.onDeleteHandler = this.onDeleteHandler.bind(this);
   }
 
   handleOpenModal (game) {
@@ -29,6 +30,23 @@ class GameList extends Component {
   }
 
   handleCloseModal () { this.setState({ showModal: false });}
+
+  onDeleteHandler(){
+    if(window.confirm('Are you sure you want to delete?')) {
+      console.log(this.state.game)
+      const data = {
+        id: this.state.game.id,
+        name: this.state.game.name,
+        description: this.state.game.description,
+        servers: this.state.game.servers,
+        platform: this.state.game.platform
+      }
+      this.handleCloseModal()
+      this.props.dispatch(deleteGame(data));
+    }
+    else
+      return null
+  }
 
   componentDidMount() {
     this.props.dispatch(fetchGames());
@@ -94,7 +112,15 @@ class GameList extends Component {
         isOpen={this.state.showModal}
         contentLabel="Minimal Modal Example"
       >
-        <button onClick={this.handleCloseModal} className="ui right floated button">Close Modal</button>
+        <button onClick={this.handleCloseModal}
+          className="ui button right floated">
+          Discard Changes
+        </button>
+        <button onClick={this.onDeleteHandler}
+          className="ui button right floated">
+          Delete Entry
+        </button>
+        <br/><br/>
         <EditGame game={this.state.game} modalClose={this.handleCloseModal}/>
       </ReactModal>
     </Container>

@@ -10,7 +10,10 @@ import {
   POST_GAME_FAILURE,
   PUT_GAME_BEGIN,
   PUT_GAME_SUCCESS,
-  PUT_GAME_FAILURE
+  PUT_GAME_FAILURE,
+  DELETE_GAME_BEGIN,
+  DELETE_GAME_SUCCESS,
+  DELETE_GAME_FAILURE,
 } from "./gameActions";
 
 const initialState = {
@@ -130,8 +133,30 @@ export default function gameReducer(
           items: []
         };
 
-    default:
+      case DELETE_GAME_BEGIN:
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+
+      case DELETE_GAME_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          items: action.payload.game
+        };
+
+      case DELETE_GAME_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload.error,
+          items: []
+        };
+
+      default:
       // ALWAYS have a default case in a reducer
-      return state;
+        return state;
   }
 }
