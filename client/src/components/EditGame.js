@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { putGame } from "../redux/gameActions";
+import { Segment } from 'semantic-ui-react'
 //https://stackoverflow.com/questions/53100829/how-to-make-a-post-request-using-react-redux
 class EditGame extends Component {
   constructor(props) {
@@ -19,9 +20,21 @@ class EditGame extends Component {
       name: this.state.name,
       description: this.state.description,
       servers: this.state.servers,
-      platform: this.state.platform
+      platform: this.state.platform,
+      discords: this.props.game.discords
     }
     this.props.modalClose()
+    console.log("fwee")
+    console.log(data.discords)
+    console.log("fwoosh")
+    console.log(this.state.population1)
+    const discordNum = data.discords.length
+    let linkvar = "this.state.link"
+    let populationvar = "this.state.population"
+    data.discords.forEach(function (discord, index) {
+      discord.link = linkvar+index
+      discord.population = populationvar+index
+    });
     this.props.dispatch(putGame(data));
   }
 
@@ -35,7 +48,6 @@ class EditGame extends Component {
 
   componentDidMount() {
     window.addEventListener('hashchange', this.handleRouteChange, false);
-    console.log(this.props.game.discords)
   }
 
   onChangeHandler(e){
@@ -58,17 +70,30 @@ class EditGame extends Component {
             </label>
           </div>
           <div className="field">
-          <label>
-            Servers:
-            <input type="text" name="servers" placeholder={this.props.game.servers} onChange={this.onChangeHandler} />
-          </label>
+            <label>
+              Servers:
+              <input type="text" name="servers" placeholder={this.props.game.servers} onChange={this.onChangeHandler} />
+            </label>
           </div>
           <div className="field">
-          <label>
-            Platform:
-            <input type="text" name="platform" placeholder={this.props.game.platform} onChange={this.onChangeHandler} />
-          </label>
+            <label>
+              Platform:
+              <input type="text" name="platform" placeholder={this.props.game.platform} onChange={this.onChangeHandler} />
+            </label>
           </div>
+          Discord Communities:
+          {this.props.game.discords.map((discord, i) => (
+              <Segment key={i}>
+                <label>
+                  Link:
+                <input type="text" name={"link"+i} placeholder={discord.link + "-" + i} onChange={this.onChangeHandler} />
+                </label>
+                <label>
+                  Amount Online:
+                <input type="number" name={"population"+i} placeholder={discord.population + "-" + i} onChange={this.onChangeHandler} />
+                </label>
+              </Segment>
+          ))}
           <button type="submit" className="ui left floated button">Submit</button>
         </form>
     )
