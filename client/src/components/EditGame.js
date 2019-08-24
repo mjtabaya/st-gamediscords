@@ -16,11 +16,7 @@ class EditGame extends Component {
   }
 
   onSubmitHandler(e){
-    console.log(e)
     e.preventDefault();
-    console.log("Sieg")
-    console.log(this.state)
-    console.log("Zeon");
     const data = {
       id: this.props.game.id,
       name: this.state.name,
@@ -43,7 +39,6 @@ class EditGame extends Component {
 
   componentDidMount() {
     window.addEventListener('hashchange', this.handleRouteChange, false);
-    console.log(this.state.game)
   }
 
   onChangeHandler(e){
