@@ -28,6 +28,7 @@ class EditGame extends Component {
       servers: this.state.servers,
       platform: this.state.platform
     }
+    this.props.modalClose()
     console.log(data)
     this.props.dispatch(putGame(data));
   }

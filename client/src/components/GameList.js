@@ -28,10 +28,7 @@ class GameList extends Component {
     });
   }
 
-  handleCloseModal () {
-    console.log("fwoosh")
-    this.setState({ showModal: false });
-  }
+  handleCloseModal () { this.setState({ showModal: false });}
 
   componentDidMount() {
     this.props.dispatch(fetchGames());
@@ -95,7 +92,7 @@ class GameList extends Component {
         contentLabel="Minimal Modal Example"
       >
         <button onClick={this.handleCloseModal}>Close Modal</button>
-        <EditGame game={this.state.game}/>
+        <EditGame game={this.state.game} modalClose={this.handleCloseModal}/>
       </ReactModal>
     </Container>
   }
