@@ -5,7 +5,7 @@ import '../App.css';
 class Home extends Component {
   render () {
     return  <div className="App">
-        <h1 className="App-title">st-gamediscords</h1>
+        <h1 className="App-title">mjtabaya/st-gamediscords</h1>
       <GameList />
     </div>
   }

@@ -30,27 +30,32 @@ class NewGameForm extends Component {
 
   render() {
     return (
-        <form onSubmit={this.onSubmitHandler}>
-          <label>
-            Name:
-            <input type="text" name="name" value={this.state.name} onChange={this.onChangeHandler} />
-          </label>
-          <br/>
-          <label>
-            Description:
-            <input type="text" name="description" value={this.state.description} onChange={this.onChangeHandler} />
-          </label>
-          <br/>
-          <label>
-            Servers:
-            <input type="text" name="servers" value={this.state.servers} onChange={this.onChangeHandler} />
-          </label>
-          <br/>
-          <label>
-            Platform:
-            <input type="text" name="platform" value={this.state.platform} onChange={this.onChangeHandler} />
-          </label>
-          <button type="submit" className="btn btn-default">Submit</button>
+        <form className="ui form" onSubmit={this.onSubmitHandler}>
+          <div className="field">
+            <label>
+              Name:
+              <input type="text" name="name" value={this.state.name} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <div className="field">
+            <label>
+              Description:
+              <input type="text" name="description" value={this.state.description} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <div className="field">
+            <label>
+              Servers:
+              <input type="text" name="servers" value={this.state.servers} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <div className="field">
+            <label>
+              Platform:
+              <input type="text" name="platform" value={this.state.platform} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <button type="submit" className="ui center floated button">Submit</button>
         </form>
     )
   }

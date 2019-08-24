@@ -52,27 +52,32 @@ class EditGame extends Component {
 
   render() {
     return (
-        <form onSubmit={this.onSubmitHandler}>
-          <label>
-            {this.props.game.id} | Name:
-            <input type="text" name="name" placeholder={this.props.game.name} onChange={this.onChangeHandler} />
-          </label>
-          <br/>
-          <label>
-            Description:
-            <input type="text" name="description" placeholder={this.props.game.description} onChange={this.onChangeHandler} />
-          </label>
-          <br/>
+        <form className="ui form" onSubmit={this.onSubmitHandler}>
+          <div className="field">
+            <label>
+              Name:
+              <input type="text" name="name" placeholder={this.props.game.name} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <div className="field">
+            <label>
+              Description:
+              <input type="text" name="description" placeholder={this.props.game.description} onChange={this.onChangeHandler} />
+            </label>
+          </div>
+          <div className="field">
           <label>
             Servers:
             <input type="text" name="servers" placeholder={this.props.game.servers} onChange={this.onChangeHandler} />
           </label>
-          <br/>
+          </div>
+          <div className="field">
           <label>
             Platform:
             <input type="text" name="platform" placeholder={this.props.game.platform} onChange={this.onChangeHandler} />
           </label>
-          <button type="submit" className="btn btn-default">Submit</button>
+          </div>
+          <button type="submit" className="ui left floated button">Submit</button>
         </form>
     )
   }

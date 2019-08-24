@@ -50,48 +50,51 @@ class GameList extends Component {
     }
 
     return <Container text>
-      <Header as='h2' icon textAlign='center' color='teal'>
+      <Header as='h2' icon textAlign='center' color='gray'>
         <Icon name='unordered list' circular />
         <Header.Content>
           Ninja Report
-          <br/>
-          Don't see your game?
-          <br/>
-          <NewGameForm onNewGame={this.postNewGame} />
         </Header.Content>
       </Header>
-      <Divider hidden section />
-        {games.length ?
-          games.map(game => (
-              <Container>
-                <Header as='h2'>
-                  <a href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
-                  <button onClick={()=>this.handleOpenModal(game)}>Edit Modal</button>
-                </Header>
-                {game.description && <p>Description: {game.description}</p>}
-                {game.servers && <p>Server(s): {game.servers}</p>}
-                {game.platform && <p>Platform(s): {game.platform}</p>}
-                {game.discords &&
-                  <Segment.Group>
-                    {game.discords.map((discord, i) => (
-                        <Segment key={i}>
-                          <a href={discord.link}>{discord.link}</a>
-                          &nbsp; | Online: {discord.population}
-                        </Segment>
-                    ))}
-                  </Segment.Group>
-                }
-                <Divider section />
-              </Container>
-            ))
-          : <Container textAlign='center'>No games found.</Container>
-        }
       <Divider section />
+      {games.length ?
+        games.map(game => (
+            <Container>
+              <button onClick={()=>this.handleOpenModal(game)}
+                className="ui button right floated"
+              >Edit</button>
+              <br/>
+              <Header as='h2'>
+                <a className="center"href={'https://www.google.com/search?q=' + game.name} target="_blank"> {game.name} </a>
+              </Header>
+              {game.description && <p>Description: {game.description}</p>}
+              {game.servers && <p>Server(s): {game.servers}</p>}
+              {game.platform && <p>Platform(s): {game.platform}</p>}
+              {game.discords &&
+                <Segment.Group>
+                  {game.discords.map((discord, i) => (
+                      <Segment key={i}>
+                        <a href={discord.link}>{discord.link}</a>
+                        &nbsp; | Online: {discord.population}
+                      </Segment>
+                  ))}
+                </Segment.Group>
+              }
+              <Divider section />
+            </Container>
+          ))
+        : <Container textAlign='center'>No games found.</Container>
+      }
+      <Header as='h3' icon textAlign='center'>
+      Don't see your game?
+      </Header>
+      <NewGameForm onNewGame={this.postNewGame} />
+
       <ReactModal
         isOpen={this.state.showModal}
         contentLabel="Minimal Modal Example"
       >
-        <button onClick={this.handleCloseModal}>Close Modal</button>
+        <button onClick={this.handleCloseModal} className="ui right floated button">Close Modal</button>
         <EditGame game={this.state.game} modalClose={this.handleCloseModal}/>
       </ReactModal>
     </Container>
