@@ -51,6 +51,8 @@ module Api::V1
     def update
       @game = Game.find(params[:id])
       @discords = params[:discords]
+      pp "pp on params"
+      pp params
       pp "pp on game params"
       pp game_params
       pp "pp on params[:discords]"
@@ -64,9 +66,11 @@ module Api::V1
         @discord = Discord.find(discord[:id])
         if @discord
           @discord.update(discord.permit(Discord.column_names))
-        else
-          @game.discords.create(discord.permit(Discord.column_names))
         end
+      end
+      @new_discords = params[:new_discords]
+      @new_discords.each do |discord|
+        @game.discords.create(discord.permit(Discord.column_names))
       end
       if @game.update(game_params)
         @games = Game.all

@@ -7,21 +7,28 @@ class EditGame extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      game: this.props
+      game: this.props,
+      discords: [],
+      discord: {name: '', link: '', population: ''}
     }
     this.onChangeHandler = this.onChangeHandler.bind(this)
     this.onSubmitHandler = this.onSubmitHandler.bind(this)
+    this.addClick = this.addClick.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   onSubmitHandler(e){
     e.preventDefault();
+    console.log(this.state)
+    console.log("above is state")
     const data = {
       id: this.props.game.id,
       name: this.state.name,
       description: this.state.description,
       servers: this.state.servers,
       platform: this.state.platform,
-      discords: this.props.game.discords
+      discords: this.props.game.discords,
+      new_discords: this.state.discords
     }
     this.props.modalClose()
     /*
@@ -59,6 +66,22 @@ class EditGame extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handleChange(i, e) {
+    let discords = this.state.discords;
+    console.log("p discords")
+    console.log(discords)
+    console.log("twee")
+    if(!discords[i]) discords[i] = {}
+    discords[i][e.target.name] = e.target.value;
+    this.setState({ discords });
+  }
+
+  addClick(e) {
+    let discords = this.state.discords
+    discords.push({})
+    this.setState({discords: discords})
+  }
+
   render() {
     return (
         <form className="ui form" onSubmit={this.onSubmitHandler}>
@@ -89,20 +112,73 @@ class EditGame extends Component {
           Discord Communities:
           {this.props.game.discords.map((discord, i) => (
               <Segment key={i}>
-                <label>
-                  Name:
-                <input type="text" name={"name"+i} placeholder={discord.name + "-" + i} onChange={this.onChangeHandler} />
-                </label>
-                <label>
-                  Link:
-                <input type="text" name={"link"+i} placeholder={discord.link + "-" + i} onChange={this.onChangeHandler} />
-                </label>
-                <label>
-                  Amount Online:
-                <input type="number" name={"population"+i} placeholder={discord.population + "-" + i} onChange={this.onChangeHandler} />
-                </label>
+                <div className="field">
+                  <label>
+                    Name:
+                  <input type="text" name={"name"+i} placeholder={discord.name + "-" + i} onChange={this.onChangeHandler} />
+                  </label>
+                </div>
+                <div className="field">
+                  <label>
+                    Link:
+                  <input type="text" name={"link"+i} placeholder={discord.link + "-" + i} onChange={this.onChangeHandler} />
+                  </label>
+                </div>
+                <div className="field">
+                  <label>
+                    Population:
+                  <input type="number" name={"population"+i} placeholder={discord.population + "-" + i} onChange={this.onChangeHandler} />
+                  </label>
+                </div>
               </Segment>
           ))}
+          <Segment>
+            {this.state.discords.map((discord, i) => (
+              <div key={i}>
+              <div className="field">
+                <label>
+                  New Discord [{i+1}]
+                </label>
+              </div>
+                <div className="field">
+                  <label>
+                    Name:
+                    <input
+                      type="text"
+                      name="name"
+                      value={discord.name || ""}
+                      onChange={e => this.handleChange(i, e)}
+                    />
+                  </label>
+                </div>
+                <div className="field">
+                  <label>
+                    Link:
+                    <input
+                      type="text"
+                      name="link"
+                      value={discord.link || ""}
+                      onChange={e => this.handleChange(i, e)}
+                    />
+                  </label>
+                </div>
+                <div className="field">
+                  <label>
+                    Population:
+                    <input
+                      type="number"
+                      name="population"
+                      value={discord.population || ""}
+                      onChange={e => this.handleChange(i, e)}
+                    />
+                  </label>
+                </div>
+                <hr/>
+              </div>
+            )
+          )}
+            <input type="button" className="ui center floated button" value="Add a server" onClick={(e) => this.addClick(e)} />
+          </Segment>
           <button type="submit" className="ui left floated button">Submit</button>
         </form>
     )
