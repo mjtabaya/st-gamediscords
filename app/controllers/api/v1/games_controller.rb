@@ -24,9 +24,18 @@ module Api::V1
 
     # POST /games
     def create
+      pp "pp params"
+      pp params
+      pp "pp game_params"
+      pp game_params
       @game = Game.new(game_params)
       if @game.save
-        #render json: @games, status: :created, location: @games
+        @discords = params[:discords]
+        @game_id = @game.id
+        @game = Game.find(@game.id)
+        @discords.each_with_index do |discord, index|
+          @game.discords.create(discord.permit(Discord.column_names))
+        end
         @games = Game.all
         render json: @games.as_json(
            include: {
@@ -40,6 +49,25 @@ module Api::V1
 
     # PATCH/PUT /games/1
     def update
+      @game = Game.find(params[:id])
+      @discords = params[:discords]
+      pp "pp on game params"
+      pp game_params
+      pp "pp on params[:discords]"
+      pp params[:discords]
+      pp "pp on @discords"
+      pp @discords
+      pp "pp on game_params[:discords]"
+      pp game_params[:discords]
+      pp "fwoosh"
+      @discords.each_with_index do |discord, index|
+        @discord = Discord.find(discord[:id])
+        if @discord
+          @discord.update(discord.permit(Discord.column_names))
+        else
+          @game.discords.create(discord.permit(Discord.column_names))
+        end
+      end
       if @game.update(game_params)
         @games = Game.all
         render json: @games.as_json(
@@ -71,7 +99,11 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def game_params
-        params.require(:game).permit(:name, :description, :servers)
+        params.require(:game)
+        .permit(:id, :name,
+          :description, :servers, :platform,
+          [:discords => [:id, :name, :link, :population, :game_id, :created_at, :updated_at]]
+        )
       end
   end
 end

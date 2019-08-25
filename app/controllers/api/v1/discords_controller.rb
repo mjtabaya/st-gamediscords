@@ -48,7 +48,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def discord_params
-        params.require(:discord).permit(:name, :link, :population, :game_id)
+        params.require(:discord).permit(:id, :name, :link, :population, :game_id)
       end
   end
 end

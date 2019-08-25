@@ -92,7 +92,8 @@ class GameList extends Component {
                 <Segment.Group>
                   {game.discords.map((discord, i) => (
                       <Segment key={i}>
-                        <a href={discord.link}>{discord.link}</a>
+                        {discord.name}
+                        &nbsp; | <a href={discord.link}>{discord.link}</a>
                         &nbsp; | Online: {discord.population}
                       </Segment>
                   ))}

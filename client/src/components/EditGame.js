@@ -24,17 +24,22 @@ class EditGame extends Component {
       discords: this.props.game.discords
     }
     this.props.modalClose()
+    /*
     console.log("fwee")
-    console.log(data.discords)
-    console.log("fwoosh")
     console.log(this.state.population1)
-    const discordNum = data.discords.length
-    let linkvar = "this.state.link"
-    let populationvar = "this.state.population"
+    console.log("fwoosh")
+    console.log("tushi")
+    console.log(data.discords)
+    */
     data.discords.forEach(function (discord, index) {
-      discord.link = linkvar+index
-      discord.population = populationvar+index
-    });
+      let namevar = "name" + index
+      discord.name = this.state[namevar]
+      let linkvar = "link" + index
+      discord.link = this.state[linkvar]
+      let populationvar = "population" + index
+      discord.population = this.state[populationvar]
+    }.bind(this));
+    console.log(data)
     this.props.dispatch(putGame(data));
   }
 
@@ -84,6 +89,10 @@ class EditGame extends Component {
           Discord Communities:
           {this.props.game.discords.map((discord, i) => (
               <Segment key={i}>
+                <label>
+                  Name:
+                <input type="text" name={"name"+i} placeholder={discord.name + "-" + i} onChange={this.onChangeHandler} />
+                </label>
                 <label>
                   Link:
                 <input type="text" name={"link"+i} placeholder={discord.link + "-" + i} onChange={this.onChangeHandler} />
